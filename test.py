@@ -56,7 +56,7 @@ def test_topological_order():
 		scores = list({value for v in voters for value in v.values()})
 		gprofile = GradeProfile(voters, list(scores))
 		logger.info("Test topological order with %g candidates and %g voters", i, int(n))
-		ranking = rgcr_wrapper(voters)
+		ranking = RGCR(voters)
 		assert is_topological_order(gprofile, ranking)
 
 @pytest.mark.parametrize("voters, expected_sol, expected_prob", [
@@ -68,7 +68,7 @@ def test_probability(voters, expected_sol, expected_prob): #test approximation t
 	prob = 0
 	trials = 10000
 	for _ in range(trials):
-		solution = rgcr_wrapper(voters)
+		solution = RGCR(voters)
 		if solution == expected_sol:
 			prob += 1
 	assert abs(prob/trials - expected_prob) < 0.05
@@ -86,7 +86,7 @@ def test_strict_uniform_dominance(estimator):
 		voters_list = create_random_voters_list(num_of_voters=voters_num, num_of_cands=items)
 		scores = list({value for v in voters_list for value in v.values()})
 		gprofile = GradeProfile(voters_list, list(scores), candidates=cands_list)
-		rgcr_ranking = rgcr_wrapper(voters_list, curr_cands=cands_list)
+		rgcr_ranking = RGCR(voters_list, curr_cands=cands_list)
 		another_ranking = estimator(gprofile)
 		if rgcr_ranking == cands_list[::-1]: # the true order is always 0 < 1 < ...
 			logger.info("RGCR found the true order in trial %g", i)

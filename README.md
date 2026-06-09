@@ -42,7 +42,7 @@ You can run the built-in test suite to verify the methods using pytest. Make sur
 ```Bash
 
 pip install pytest
-pytest
+pytest test.py
 Web Interface & Demo
 ```
 

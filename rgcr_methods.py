@@ -2,15 +2,15 @@
 An easier function for the rgcr function, make it unecessary to use pref-voting objects.
 '''
 from pref_voting.grade_profiles import GradeProfile
-from pref_voting.stochastic_methods import RGCR
+from pref_voting.stochastic_methods import RGCR as rgcr_original
 import numpy as np
 
 
-def rgcr_wrapper(voters:list, w=(lambda x: x/(1+x)), curr_cands=None)->list:
+def RGCR(voters:list, w=(lambda x: x/(1+x)), curr_cands=None)->list:
 	#The major function: Get only essential input and run rgcr on it.
 	scores = {value for v in voters for value in v.values()}
 	gprofile = GradeProfile(voters, list(scores), candidates=curr_cands)
-	return RGCR(gprofile, w=w, curr_cands=curr_cands)
+	return rgcr_original(gprofile, w=w, curr_cands=curr_cands)
 
 
 def create_random_voters_list(num_of_voters=5, num_of_cands=20, reviewing_prob=0.3, seed=None):
@@ -65,4 +65,4 @@ def rgcr_from_csv(file_path: str, w=(lambda x: x/(1+x)), curr_cands=None) -> lis
 				voters.append(voter_votes)
 	
 	print(voters)
-	return rgcr_wrapper(voters, w=w, curr_cands=curr_cands)
+	return RGCR(voters, w=w, curr_cands=curr_cands)
