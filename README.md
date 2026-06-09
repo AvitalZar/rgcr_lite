@@ -1,7 +1,7 @@
 # RGCR Wrapper
 
 A simple and convenient Python wrapper for the **RGCR** (Rank-Grounded Calibration for Ratings) method, implemented based on the paper: 
-*"Handling Arbitrary Miscalibrations in Ratings"* by Jingyan Wang and Nihar B. Shah.
+*"Handling Arbitrary Miscalibrations in Ratings"* by Jingyan Wang and Nihar B. Shah. [https://arxiv.org/pdf/1806.05085]
 
 ---
 
