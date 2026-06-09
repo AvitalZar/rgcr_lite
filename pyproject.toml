@@ -13,7 +13,7 @@ readme = "README.md"
 
 dependencies = [
 	"pref_voting @ git+https://github.com/AvitalZar/pref_voting.git",
-	"sortedcontainers
+	"sortedcontainers"
 ]
 
 [tool.setuptools]
