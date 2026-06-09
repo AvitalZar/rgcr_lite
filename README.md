@@ -32,3 +32,21 @@ voters_data = [
 
 print(rgcr_wrapper(voters_data))
 # Output: [3, 2, 1]
+```
+
+---
+
+## Running Tests
+You can run the built-in test suite to verify the methods using pytest. Make sure you have it installed:
+
+```Bash
+
+pip install pytest
+pytest
+Web Interface & Demo
+```
+
+---
+
+For a hands-on demonstration and an easy-to-use interface, visit the live web app:
+🔗 [https://avitalzer.csariel.xyz/](https://avitalzer.csariel.xyz/)
