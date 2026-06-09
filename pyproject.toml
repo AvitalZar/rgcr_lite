@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "RGCR_lite"
+version = "0.1.0"
+authors = [
+    { name = "Avital Zar", email = "tchykzr@gmail.com" }
+]
+description = "An easier for use version of the RGCR method presented in https://arxiv.org/abs/1806.05085"
+readme = "README.md"
+
+dependencies = [
+	"git+https://github.com/AvitalZar/pref_voting.git@f18102d3af8d9dcd27f4a9f74e901700c2eb4aa2"
+]
+
+[tool.setuptools]
+packages = { find = {} }

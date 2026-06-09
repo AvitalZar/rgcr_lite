@@ -4,7 +4,7 @@ Tests took from the test in pref_voting for the original method.
 
 #from pref_voting.stochastic_methods import RGCR
 from pref_voting.grade_profiles import GradeProfile
-from rgcr_methods import *
+from rgcr_lite.rgcr_methods import *
 import networkx as nx
 import pytest
 import numpy as np
