@@ -14,7 +14,7 @@ A simple and convenient Python wrapper for the **RGCR** (Rank-Grounded Calibrati
 
 The library provides two primary functions:
 
-* **`rgcr_wrapper(voters_data)`**: Accepts a list of dictionaries representing voters and their ratings, processes the calibration, and returns a ranked list of candidates.
+* **`RGCR(voters_data)`**: Accepts a list of dictionaries representing voters and their ratings, processes the calibration, and returns a ranked list of candidates.
 * **`rgcr_from_csv(file_path)`**: Accepts a path to a CSV file where each row represents a voter (formatted as `Candidate Name, score, Candidate Name, score, ...`, a voter per line). It parses the file, executes the wrapper, and returns the sorted list of candidates.
 
 ---
