@@ -12,7 +12,7 @@ description = "An easier for use version of the RGCR method presented in https:/
 readme = "README.md"
 
 dependencies = [
-	"pref_voting @ git+https://github.com/AvitalZar/pref_voting.git",
+	"pref_voting @ git+https://github.com/AvitalZar/pref_voting.git@e67468487dc75890b246fefdef5961675c3758bd",
 	"sortedcontainers"
 ]
 
