@@ -28,41 +28,50 @@ def create_random_voters_list(num_of_voters=5, num_of_cands=20, reviewing_prob=0
 #	logger.debug("Created random legal graph with %s", voters)
 	return voters
 
-
-import csv
-
 def rgcr_from_csv(file_path: str, w=(lambda x: x/(1+x)), curr_cands=None) -> list:
-	voters = []
-	
-	with open(file_path, mode='r', encoding='utf-8') as infile:
+    import csv
 
-		sample = infile.read(1024)
-		infile.seek(0)
+    with open(file_path, mode='r', encoding='utf-8') as infile:
+        sample = infile.read(1024)
+        infile.seek(0)
 
-		try:
-			dialect = csv.Sniffer().sniff(sample)
-			reader = csv.reader(infile, dialect)
-		except csv.Error:
-			reader = csv.reader(infile)
-		
-		for row_num, row in enumerate(reader, 1):
-			voter_votes = {}
-			print(f"Row {row_num}: {row} (Length: {len(row)})")
-			for i in range(0, len(row), 2):
-				if i + 1 < len(row):
-					cand = row[i].strip()
-					score_str = row[i+1].strip()
-					
-					if cand and score_str:
-						try:
-							score = float(score_str)
-							voter_votes[cand] = int(score) if score.is_integer() else score
-						except ValueError:
-							continue
-			
-			if voter_votes:
-				print("appending")
-				voters.append(voter_votes)
-	
-	print(voters)
-	return RGCR(voters, w=w, curr_cands=curr_cands)
+        try:
+            dialect = csv.Sniffer().sniff(sample)
+            reader = csv.reader(infile, dialect)
+        except csv.Error:
+            reader = csv.reader(infile)
+
+        rows = list(reader)
+
+    if not rows:
+        return RGCR([], w=w, curr_cands=curr_cands)
+
+    # First row is header: empty cell, then reviewer names
+    reviewer_names = [col.strip() for col in rows[0][1:]]
+    num_reviewers = len(reviewer_names)
+
+    # Build a dict per reviewer: {item: score}
+    reviewer_votes = [{} for _ in range(num_reviewers)]
+
+    for row in rows[1:]:
+        if not row:
+            continue
+        item = row[0].strip()
+        if not item:
+            continue
+
+        for i, score_str in enumerate(row[1:num_reviewers + 1]):
+            score_str = score_str.strip()
+            if not score_str:
+                continue
+            try:
+                score = float(score_str)
+                reviewer_votes[i][item] = int(score) if score.is_integer() else score
+            except ValueError:
+                continue
+
+    # Drop reviewers who gave no scores
+    voters = [rv for rv in reviewer_votes if rv]
+
+    print(voters)
+    return RGCR(voters, w=w, curr_cands=curr_cands)
