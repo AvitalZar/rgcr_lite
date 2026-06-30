@@ -3,7 +3,7 @@ An easier function for the rgcr function, make it unecessary to use pref-voting 
 '''
 from pref_voting.grade_profiles import GradeProfile
 from pref_voting.stochastic_methods import RGCR as rgcr_original
-import numpy as np
+from .helpers import voters_avg, voters_from_csv
 
 
 def RGCR(voters:list, w=(lambda x: x/(1+x)), curr_cands=None)->list:
@@ -13,65 +13,27 @@ def RGCR(voters:list, w=(lambda x: x/(1+x)), curr_cands=None)->list:
 	return rgcr_original(gprofile, w=w, curr_cands=curr_cands)
 
 
-def create_random_voters_list(num_of_voters=5, num_of_cands=20, reviewing_prob=0.3, seed=None):
-	np.random.seed(seed)
-	candidates = list(range(num_of_cands))
-	voters = []
-	for _ in range(num_of_voters):
-		voter = {}
-		val = 0
-		for c in candidates:
-			if np.random.rand() < reviewing_prob:
-				voter[c] = val + np.random.randint(0, 10)+1
-				val = voter[c]
-		voters.append(voter)
-#	logger.debug("Created random legal graph with %s", voters)
-	return voters
 
 def rgcr_from_csv(file_path: str, w=(lambda x: x/(1+x)), curr_cands=None) -> list:
-    import csv
+    voters = voters_from_csv(file_path)
 
-    with open(file_path, mode='r', encoding='utf-8') as infile:
-        sample = infile.read(1024)
-        infile.seek(0)
-
-        try:
-            dialect = csv.Sniffer().sniff(sample)
-            reader = csv.reader(infile, dialect)
-        except csv.Error:
-            reader = csv.reader(infile)
-
-        rows = list(reader)
-
-    if not rows:
-        return RGCR([], w=w, curr_cands=curr_cands)
-
-    # First row is header: empty cell, then reviewer names
-    reviewer_names = [col.strip() for col in rows[0][1:]]
-    num_reviewers = len(reviewer_names)
-
-    # Build a dict per reviewer: {item: score}
-    reviewer_votes = [{} for _ in range(num_reviewers)]
-
-    for row in rows[1:]:
-        if not row:
-            continue
-        item = row[0].strip()
-        if not item:
-            continue
-
-        for i, score_str in enumerate(row[1:num_reviewers + 1]):
-            score_str = score_str.strip()
-            if not score_str:
-                continue
-            try:
-                score = float(score_str)
-                reviewer_votes[i][item] = int(score) if score.is_integer() else score
-            except ValueError:
-                continue
-
-    # Drop reviewers who gave no scores
-    voters = [rv for rv in reviewer_votes if rv]
-
-    print(voters)
     return RGCR(voters, w=w, curr_cands=curr_cands)
+
+
+def rgcr_avg(voters: list, w=(lambda x: x/(1+x))):
+    '''
+    This function suppose to solve the problem of the assumption of the original algo
+    that there are no cycles in the voting. The method is to devide the voters into groups
+    such that there's no candidate that appear in two groups, then compute an average score
+    on the cands in every group and run the original algo on it. It isn't efficient as the
+    original but work on cycled input.
+    '''
+    return RGCR(voters_avg(voters), w)
+
+def rgcr_avg_from_csv(file_path: str):
+    voters = voters_from_csv(file_path)
+    return rgcr_avg(voters)
+
+
+def rgcr_tuples(voters:list, w=(lambda x: x/(1+x))):
+    pass
