@@ -17,6 +17,10 @@ The library provides two primary functions:
 * **`RGCR(voters_data)`**: Accepts a list of dictionaries representing voters and their ratings, processes the calibration, and returns a ranked list of candidates.
 * **`rgcr_from_csv(file_path)`**: Accepts a path to a CSV file where each row represents a voter (formatted as `Candidate Name, score, Candidate Name, score, ...`, a voter per line). It parses the file, executes the wrapper, and returns the sorted list of candidates.
 
+### Additional Functions
+
+* **`rgcr_avg_from_csv(file_path)`**: Solves the original algorithm's limitation which assumes there are no cycles in the voting graph. This method divides the voters into disjoint groups such that no candidate appears in more than one group. It then computes an average score for the candidates in each group and runs the original algorithm on the results. While less efficient than the original method, it successfully handles cyclical inputs.
+
 ---
 
 ## Usage Example
